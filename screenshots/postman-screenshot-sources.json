@@ -1,0 +1,117 @@
+{
+  "source": "Actual native Postman Desktop App window screenshots captured using Computer Use sky.get_window_state.",
+  "screenshot_content_edited": false,
+  "postman_desktop_version_observed": "11.45.0-r250512-1424",
+  "run_date": "2026-10-06",
+  "run_timezone": "Asia/Ulaanbaatar",
+  "run_times_are_observed_postman_start_times": true,
+  "runs": [
+    {
+      "case": "PASS",
+      "start_time": "11:08:04",
+      "passed": 114,
+      "failed": 0,
+      "duration": "5s 92ms"
+    },
+    {
+      "case": "FAIL",
+      "start_time": "11:09:53",
+      "passed": 113,
+      "failed": 1,
+      "duration": "6s 387ms"
+    },
+    {
+      "case": "DOWN",
+      "start_time": "11:11:12",
+      "passed": 0,
+      "failed": 114,
+      "duration": "6s 177ms",
+      "stop_run_if_error_occurs": false
+    },
+    {
+      "case": "PUBLIC_API",
+      "start_time": "11:12:23",
+      "passed": 3,
+      "failed": 0,
+      "duration": "1s 632ms"
+    }
+  ],
+  "newman_logs": "Separate earlier executions; the Postman GUI runs do not have CLI exit codes.",
+  "collection_sha256": {
+    "lab05-collection.json": "a490400b7bfc1156b559f475a1d10500b014860cb23db9abb626d82dc5c2cf39",
+    "lab05-collection-fail.json": "a89e4f1dd4dad29b33d20d830e187a52b4e55a80842a98f0e7ec3f325e0002de",
+    "lab05-publicapi-collection.json": "1ba0f74497e46e9303c7951689adfeb5b1002fc98871c2ed41c4c42e26f0b29b"
+  },
+  "screenshots": [
+    {
+      "file": "postman-pass.jpg",
+      "description": "Collection Runner: 114 passed, 0 failed; T01 has HTTP 201 and all four checks pass.",
+      "mime_type": "image/jpeg",
+      "sha256": "f842d19588854a1191bb142c5f7a45c9871548819e4b523aed81fa01b352c29b",
+      "width": 1707,
+      "height": 1019,
+      "bytes": 151993,
+      "saved_at_utc": "2026-10-06T03:08:38.677977+00:00"
+    },
+    {
+      "file": "postman-response.jpg",
+      "description": "T01 request body and actual HTTP 201 Created JSON response: result OK, registrationID 5.",
+      "mime_type": "image/jpeg",
+      "sha256": "d04371683b8fbf0c080184df534ac5502d9de54135d43dba5197f5f615b7146d",
+      "width": 1707,
+      "height": 1019,
+      "bytes": 136340,
+      "saved_at_utc": "2026-10-06T03:09:24.042851+00:00"
+    },
+    {
+      "file": "postman-tests.jpg",
+      "description": "Individual T01 response test results: all four checks passed.",
+      "mime_type": "image/jpeg",
+      "sha256": "55804cb24f165ab7ee0a6c49c9c479ef0919d03e10f01d6e71eee8d308c37d41",
+      "width": 1707,
+      "height": 1019,
+      "bytes": 142294,
+      "saved_at_utc": "2026-10-06T03:09:31.209621+00:00"
+    },
+    {
+      "file": "postman-fail.jpg",
+      "description": "Deliberately failing oracle: 113 passed, 1 failed; expected HTTP 200 but got 201.",
+      "mime_type": "image/jpeg",
+      "sha256": "29d49a184340c9d5d872f5d7715d7a50bdacca28e94bcb0318b786af0ba99752",
+      "width": 1707,
+      "height": 1019,
+      "bytes": 132678,
+      "saved_at_utc": "2026-10-06T03:10:24.493081+00:00"
+    },
+    {
+      "file": "postman-down.jpg",
+      "description": "Server stopped: Collection Runner reports 0 passed, 114 failed, and No response.",
+      "mime_type": "image/jpeg",
+      "sha256": "f2df252f083bb6ca8d9a4cc6c467b111e874e60b0d0a53b3d520f0120ab03a34",
+      "width": 1707,
+      "height": 1019,
+      "bytes": 189414,
+      "saved_at_utc": "2026-10-06T03:11:38.198242+00:00"
+    },
+    {
+      "file": "postman-econnrefused.jpg",
+      "description": "Individual T01 request after server stop: connect ECONNREFUSED 127.0.0.1:3000.",
+      "mime_type": "image/jpeg",
+      "sha256": "ad64884bd065611be8152e1315139047e6e7584f808a1088328595609c4b8076",
+      "width": 1707,
+      "height": 1019,
+      "bytes": 150508,
+      "saved_at_utc": "2026-10-06T03:11:57.996276+00:00"
+    },
+    {
+      "file": "postman-publicapi.jpg",
+      "description": "Public API Collection Runner: HTTP 200, 3 passed, 0 failed.",
+      "mime_type": "image/jpeg",
+      "sha256": "9de98526baf8a5366edc3e71b9cef8b84f6d7a0e5c0302a3c8b13b52cc70d38a",
+      "width": 1707,
+      "height": 1019,
+      "bytes": 131345,
+      "saved_at_utc": "2026-10-06T03:12:41.195453+00:00"
+    }
+  ]
+}

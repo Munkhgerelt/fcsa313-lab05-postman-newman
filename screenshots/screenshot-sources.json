@@ -1,0 +1,34 @@
+[
+  {
+    "screenshot": "newman-pass.png",
+    "source": "results/newman-pass.txt",
+    "source_sha256": "d8e57c13a1cbd8d8dbfbd8e45495f62375b108b1b3d8e7ffe4b7658884aab616",
+    "screenshot_sha256": "42b44226e58282ef733f92b1f12d5f3bddccddf5b53fb538a52891b6cbfbece9",
+    "captured_at": "2026-10-06T03:01:16.008Z",
+    "description": "Browser screenshot of actual saved Newman output; source sections are explicitly labelled."
+  },
+  {
+    "screenshot": "newman-fail.png",
+    "source": "results/newman-fail.txt",
+    "source_sha256": "454b697f21ff82c9143a6e4c0aad337e00542816ab47d06c53c831fa439ae5da",
+    "screenshot_sha256": "5953d4076df41451a1c04c251446c51e0f72e3cda1cacbb3f5efb6947147d488",
+    "captured_at": "2026-10-06T03:01:16.114Z",
+    "description": "Browser screenshot of actual saved Newman output; source sections are explicitly labelled."
+  },
+  {
+    "screenshot": "newman-down.png",
+    "source": "results/newman-down.txt",
+    "source_sha256": "a3d2b64e977dbd6d2b4e7df679e00ab4868213390956a617a57e6f3e27b10168",
+    "screenshot_sha256": "8aa7b51b9e5ac540f02cf9973e130e9dd05758c3b301ec76d3b6ce28527d939c",
+    "captured_at": "2026-10-06T03:01:16.236Z",
+    "description": "Browser screenshot of actual saved Newman output; source sections are explicitly labelled."
+  },
+  {
+    "screenshot": "newman-publicapi.png",
+    "source": "results/newman-publicapi.txt",
+    "source_sha256": "c82785523dc5873cc1f07f9979d1f5b0afbea606901a19421459b2a871beef02",
+    "screenshot_sha256": "783efd3e2d7299c1e226396977dd8483b0e6ce446052150790c301bf969e045e",
+    "captured_at": "2026-10-06T03:01:16.348Z",
+    "description": "Browser screenshot of actual saved Newman output; source sections are explicitly labelled."
+  }
+]

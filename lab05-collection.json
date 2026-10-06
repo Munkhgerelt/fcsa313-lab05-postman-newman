@@ -1,0 +1,146 @@
+{
+  "info": {
+    "_postman_id": "502d8ca9-55f3-421e-98f6-7805a1c7080d",
+    "name": "F.CSA313 Lab05 - Registration API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "runNamespace",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if (!pm.collectionVariables.get(\"runNamespace\")) {",
+          "  pm.collectionVariables.set(\"runNamespace\", \"lab05_\" + Date.now() + \"_\" + pm.variables.replaceIn(\"{{$guid}}\").replace(/-/g, \"\"));",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "T01 - Active student with completed prerequisite succeeds",
+      "item": [
+        {
+          "name": "Setup student for T01",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T01_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Setup course for T01",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T01_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T01 - Active student with completed prerequisite succeeds",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T01_student\", \"courseID\": \"{{runNamespace}}_T01_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T01: HTTP status is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"T01: result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });",
+                  "pm.test(\"T01: registrationID is a positive integer\", function () { var id = pm.response.json().registrationID; pm.expect(id).to.be.a(\"number\"); pm.expect(Number.isInteger(id)).to.eql(true); pm.expect(id).to.be.above(0); });",
+                  "pm.test(\"T01: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    }
+  ]
+}

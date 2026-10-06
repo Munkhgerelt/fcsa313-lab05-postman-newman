@@ -1,0 +1,31 @@
+{
+  "info": {
+    "_postman_id": "a1e0d730-d0c4-4865-beba-8fb998319bc3",
+    "name": "F.CSA313 Lab05 - Optional public API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET users - status, array, and first user name",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "https://jsonplaceholder.typicode.com/users"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Public API HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Public API response is an array\", function () { pm.expect(pm.response.json()).to.be.an(\"array\"); });",
+              "pm.test(\"First user name is Leanne Graham\", function () { pm.expect(pm.response.json()[0].name).to.eql(\"Leanne Graham\"); });"
+            ]
+          }
+        }
+      ],
+      "response": []
+    }
+  ]
+}

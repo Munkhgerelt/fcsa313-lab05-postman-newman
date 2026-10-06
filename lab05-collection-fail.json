@@ -1,0 +1,1581 @@
+{
+  "info": {
+    "_postman_id": "cd8ac5a3-3a1c-4f94-a45a-57cb4a218f77",
+    "name": "F.CSA313 Lab05 - Registration API - Deliberately failing oracle",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "runNamespace",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if (!pm.collectionVariables.get(\"runNamespace\")) {",
+          "  pm.collectionVariables.set(\"runNamespace\", \"lab05_\" + Date.now() + \"_\" + pm.variables.replaceIn(\"{{$guid}}\").replace(/-/g, \"\"));",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "T01 - Active student with completed prerequisite succeeds",
+      "item": [
+        {
+          "name": "Setup student for T01",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T01_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Setup course for T01",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T01_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T01 - Active student with completed prerequisite succeeds",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T01_student\", \"courseID\": \"{{runNamespace}}_T01_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T01: INTENTIONAL FAIL - expect 200 instead of 201\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"T01: result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });",
+                  "pm.test(\"T01: registrationID is a positive integer\", function () { var id = pm.response.json().registrationID; pm.expect(id).to.be.a(\"number\"); pm.expect(Number.isInteger(id)).to.eql(true); pm.expect(id).to.be.above(0); });",
+                  "pm.test(\"T01: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T02 - Missing student returns ERROR_NO_STUDENT",
+      "item": [
+        {
+          "name": "Setup course for T02",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T02_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T02 - Missing student returns ERROR_NO_STUDENT",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T02_student\", \"courseID\": \"{{runNamespace}}_T02_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T02: HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"T02: result is ERROR_NO_STUDENT\", function () { pm.expect(pm.response.json().result).to.eql(\"ERROR_NO_STUDENT\"); });",
+                  "pm.test(\"T02: rejected registration has no registrationID\", function () { pm.expect(pm.response.json()).not.to.have.property(\"registrationID\"); });",
+                  "pm.test(\"T02: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T03 - Inactive student returns ERROR_INACTIVE_STUDENT",
+      "item": [
+        {
+          "name": "Setup student for T03",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T03_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"inactive\", \"coursesTaken\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Setup course for T03",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T03_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T03 - Inactive student returns ERROR_INACTIVE_STUDENT",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T03_student\", \"courseID\": \"{{runNamespace}}_T03_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T03: HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"T03: result is ERROR_INACTIVE_STUDENT\", function () { pm.expect(pm.response.json().result).to.eql(\"ERROR_INACTIVE_STUDENT\"); });",
+                  "pm.test(\"T03: rejected registration has no registrationID\", function () { pm.expect(pm.response.json()).not.to.have.property(\"registrationID\"); });",
+                  "pm.test(\"T03: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T04 - Missing course returns ERROR_NO_COURSE",
+      "item": [
+        {
+          "name": "Setup student for T04",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T04_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T04 - Missing course returns ERROR_NO_COURSE",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T04_student\", \"courseID\": \"{{runNamespace}}_T04_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T04: HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"T04: result is ERROR_NO_COURSE\", function () { pm.expect(pm.response.json().result).to.eql(\"ERROR_NO_COURSE\"); });",
+                  "pm.test(\"T04: rejected registration has no registrationID\", function () { pm.expect(pm.response.json()).not.to.have.property(\"registrationID\"); });",
+                  "pm.test(\"T04: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T05 - Unrelated completed course does not satisfy prerequisite",
+      "item": [
+        {
+          "name": "Setup student for T05",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T05_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": [\"CS101\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Setup course for T05",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T05_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T05 - Unrelated completed course does not satisfy prerequisite",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T05_student\", \"courseID\": \"{{runNamespace}}_T05_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T05: HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"T05: result is ERROR_PREREQUISITES\", function () { pm.expect(pm.response.json().result).to.eql(\"ERROR_PREREQUISITES\"); });",
+                  "pm.test(\"T05: rejected registration has no registrationID\", function () { pm.expect(pm.response.json()).not.to.have.property(\"registrationID\"); });",
+                  "pm.test(\"T05: missing prerequisites are exact\", function () { pm.expect(pm.response.json().missing).to.eql([\"CS201\"]); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T06 - Missing student takes precedence over missing course",
+      "item": [
+        {
+          "name": "T06 - Missing student takes precedence over missing course",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T06_student\", \"courseID\": \"{{runNamespace}}_T06_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T06: HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"T06: result is ERROR_NO_STUDENT\", function () { pm.expect(pm.response.json().result).to.eql(\"ERROR_NO_STUDENT\"); });",
+                  "pm.test(\"T06: rejected registration has no registrationID\", function () { pm.expect(pm.response.json()).not.to.have.property(\"registrationID\"); });",
+                  "pm.test(\"T06: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T07 - Inactive student takes precedence over missing course",
+      "item": [
+        {
+          "name": "Setup student for T07",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T07_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"inactive\", \"coursesTaken\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T07 - Inactive student takes precedence over missing course",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T07_student\", \"courseID\": \"{{runNamespace}}_T07_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T07: HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"T07: result is ERROR_INACTIVE_STUDENT\", function () { pm.expect(pm.response.json().result).to.eql(\"ERROR_INACTIVE_STUDENT\"); });",
+                  "pm.test(\"T07: rejected registration has no registrationID\", function () { pm.expect(pm.response.json()).not.to.have.property(\"registrationID\"); });",
+                  "pm.test(\"T07: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T08 - Inactive student takes precedence over missing prerequisites",
+      "item": [
+        {
+          "name": "Setup student for T08",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T08_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"inactive\", \"coursesTaken\": []}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Setup course for T08",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T08_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T08 - Inactive student takes precedence over missing prerequisites",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T08_student\", \"courseID\": \"{{runNamespace}}_T08_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T08: HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"T08: result is ERROR_INACTIVE_STUDENT\", function () { pm.expect(pm.response.json().result).to.eql(\"ERROR_INACTIVE_STUDENT\"); });",
+                  "pm.test(\"T08: rejected registration has no registrationID\", function () { pm.expect(pm.response.json()).not.to.have.property(\"registrationID\"); });",
+                  "pm.test(\"T08: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T09 - Partially completed prerequisites report exactly the missing course",
+      "item": [
+        {
+          "name": "Setup student for T09",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T09_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Setup course for T09",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T09_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\", \"CS202\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T09 - Partially completed prerequisites report exactly the missing course",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T09_student\", \"courseID\": \"{{runNamespace}}_T09_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T09: HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"T09: result is ERROR_PREREQUISITES\", function () { pm.expect(pm.response.json().result).to.eql(\"ERROR_PREREQUISITES\"); });",
+                  "pm.test(\"T09: rejected registration has no registrationID\", function () { pm.expect(pm.response.json()).not.to.have.property(\"registrationID\"); });",
+                  "pm.test(\"T09: missing prerequisites are exact\", function () { pm.expect(pm.response.json().missing).to.eql([\"CS202\"]); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T10 - No prerequisites succeeds with no completed courses",
+      "item": [
+        {
+          "name": "Setup student for T10",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T10_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": []}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Setup course for T10",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T10_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": []}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T10 - No prerequisites succeeds with no completed courses",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T10_student\", \"courseID\": \"{{runNamespace}}_T10_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T10: HTTP status is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"T10: result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });",
+                  "pm.test(\"T10: registrationID is a positive integer\", function () { var id = pm.response.json().registrationID; pm.expect(id).to.be.a(\"number\"); pm.expect(Number.isInteger(id)).to.eql(true); pm.expect(id).to.be.above(0); });",
+                  "pm.test(\"T10: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T11 - Empty completed-course list reports every prerequisite",
+      "item": [
+        {
+          "name": "Setup student for T11",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T11_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": []}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Setup course for T11",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T11_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\", \"CS202\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T11 - Empty completed-course list reports every prerequisite",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T11_student\", \"courseID\": \"{{runNamespace}}_T11_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T11: HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"T11: result is ERROR_PREREQUISITES\", function () { pm.expect(pm.response.json().result).to.eql(\"ERROR_PREREQUISITES\"); });",
+                  "pm.test(\"T11: rejected registration has no registrationID\", function () { pm.expect(pm.response.json()).not.to.have.property(\"registrationID\"); });",
+                  "pm.test(\"T11: missing prerequisites are exact\", function () { pm.expect(pm.response.json().missing).to.eql([\"CS201\", \"CS202\"]); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T12 - Missing studentID returns ERROR_BAD_REQUEST",
+      "item": [
+        {
+          "name": "Setup course for T12",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T12_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": []}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T12 - Missing studentID returns ERROR_BAD_REQUEST",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"courseID\": \"{{runNamespace}}_T12_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T12: HTTP status is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"T12: result is ERROR_BAD_REQUEST\", function () { pm.expect(pm.response.json().result).to.eql(\"ERROR_BAD_REQUEST\"); });",
+                  "pm.test(\"T12: rejected registration has no registrationID\", function () { pm.expect(pm.response.json()).not.to.have.property(\"registrationID\"); });",
+                  "pm.test(\"T12: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T13 - Missing courseID returns ERROR_BAD_REQUEST",
+      "item": [
+        {
+          "name": "Setup student for T13",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T13_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T13 - Missing courseID returns ERROR_BAD_REQUEST",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T13_student\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T13: HTTP status is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"T13: result is ERROR_BAD_REQUEST\", function () { pm.expect(pm.response.json().result).to.eql(\"ERROR_BAD_REQUEST\"); });",
+                  "pm.test(\"T13: rejected registration has no registrationID\", function () { pm.expect(pm.response.json()).not.to.have.property(\"registrationID\"); });",
+                  "pm.test(\"T13: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T14 - Malformed JSON returns ERROR_BAD_JSON",
+      "item": [
+        {
+          "name": "Setup student for T14",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T14_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Setup course for T14",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T14_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T14 - Malformed JSON returns ERROR_BAD_JSON",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\":\"{{runNamespace}}_T14_student\",\"courseID\":",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T14: HTTP status is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"T14: result is ERROR_BAD_JSON\", function () { pm.expect(pm.response.json().result).to.eql(\"ERROR_BAD_JSON\"); });",
+                  "pm.test(\"T14: rejected registration has no registrationID\", function () { pm.expect(pm.response.json()).not.to.have.property(\"registrationID\"); });",
+                  "pm.test(\"T14: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T15 - All prerequisites completed in another order with extra courses succeeds",
+      "item": [
+        {
+          "name": "Setup student for T15",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T15_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"active\", \"coursesTaken\": [\"CS202\", \"CS101\", \"CS201\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Setup course for T15",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T15_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"prerequisites\": [\"CS201\", \"CS202\"]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T15 - All prerequisites completed in another order with extra courses succeeds",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T15_student\", \"courseID\": \"{{runNamespace}}_T15_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T15: HTTP status is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"T15: result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });",
+                  "pm.test(\"T15: registrationID is a positive integer\", function () { var id = pm.response.json().registrationID; pm.expect(id).to.be.a(\"number\"); pm.expect(Number.isInteger(id)).to.eql(true); pm.expect(id).to.be.above(0); });",
+                  "pm.test(\"T15: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "T16 - Omitted setup fields use active and empty-array defaults",
+      "item": [
+        {
+          "name": "Setup student for T16",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/students/{{runNamespace}}_T16_student",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Setup course for T16",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/courses/{{runNamespace}}_T16_course",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Setup HTTP status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Setup result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "T16 - Omitted setup fields use active and empty-array defaults",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/registrations",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"studentID\": \"{{runNamespace}}_T16_student\", \"courseID\": \"{{runNamespace}}_T16_course\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"T16: HTTP status is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"T16: result is OK\", function () { pm.expect(pm.response.json().result).to.eql(\"OK\"); });",
+                  "pm.test(\"T16: registrationID is a positive integer\", function () { var id = pm.response.json().registrationID; pm.expect(id).to.be.a(\"number\"); pm.expect(Number.isInteger(id)).to.eql(true); pm.expect(id).to.be.above(0); });",
+                  "pm.test(\"T16: response has no prerequisite-error details\", function () { pm.expect(pm.response.json()).not.to.have.property(\"missing\"); });"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    }
+  ]
+}

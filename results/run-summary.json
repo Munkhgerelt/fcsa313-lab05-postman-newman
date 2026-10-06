@@ -1,0 +1,204 @@
+{
+  "generated_at": "2026-10-06T08:24:51.244700+08:00",
+  "node_version": "v24.19.0",
+  "newman_version": "6.2.2",
+  "pass": {
+    "exit_code": 0,
+    "iterations": 1,
+    "requests_executed": 41,
+    "requests_failed": 0,
+    "assertions_executed": 114,
+    "assertions_failed": 0,
+    "failures": 0
+  },
+  "fail": {
+    "exit_code": 1,
+    "iterations": 1,
+    "requests_executed": 41,
+    "requests_failed": 0,
+    "assertions_executed": 114,
+    "assertions_failed": 1,
+    "failures": 1
+  },
+  "down": {
+    "exit_code": 1,
+    "iterations": 1,
+    "requests_executed": 41,
+    "requests_failed": 41,
+    "assertions_executed": 114,
+    "assertions_failed": 114,
+    "failures": 155
+  },
+  "independence": [
+    {
+      "case": "T01",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 3,
+      "requests_failed": 0,
+      "assertions_executed": 8,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T02",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 2,
+      "requests_failed": 0,
+      "assertions_executed": 6,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T03",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 3,
+      "requests_failed": 0,
+      "assertions_executed": 8,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T04",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 2,
+      "requests_failed": 0,
+      "assertions_executed": 6,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T05",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 3,
+      "requests_failed": 0,
+      "assertions_executed": 8,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T06",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 1,
+      "requests_failed": 0,
+      "assertions_executed": 4,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T07",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 2,
+      "requests_failed": 0,
+      "assertions_executed": 6,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T08",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 3,
+      "requests_failed": 0,
+      "assertions_executed": 8,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T09",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 3,
+      "requests_failed": 0,
+      "assertions_executed": 8,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T10",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 3,
+      "requests_failed": 0,
+      "assertions_executed": 8,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T11",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 3,
+      "requests_failed": 0,
+      "assertions_executed": 8,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T12",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 2,
+      "requests_failed": 0,
+      "assertions_executed": 6,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T13",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 2,
+      "requests_failed": 0,
+      "assertions_executed": 6,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T14",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 3,
+      "requests_failed": 0,
+      "assertions_executed": 8,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T15",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 3,
+      "requests_failed": 0,
+      "assertions_executed": 8,
+      "assertions_failed": 0,
+      "failures": 0
+    },
+    {
+      "case": "T16",
+      "exit_code": 0,
+      "iterations": 1,
+      "requests_executed": 3,
+      "requests_failed": 0,
+      "assertions_executed": 8,
+      "assertions_failed": 0,
+      "failures": 0
+    }
+  ],
+  "repeatability": "Full correct collection passed twice on the same server before FAIL and DOWN; successful registrations accumulated.",
+  "public_api": {
+    "requests_executed": 1,
+    "assertions_executed": 3,
+    "assertions_failed": 0,
+    "exit_code": 0
+  },
+  "source_server_sha256": "71c5a3de63b2c474e8bf1540d4a214b8f4848feb88dea2fbaf4c4480e4d1d2ab",
+  "normal_collection_sha256": "a490400b7bfc1156b559f475a1d10500b014860cb23db9abb626d82dc5c2cf39",
+  "failing_collection_sha256": "a89e4f1dd4dad29b33d20d830e187a52b4e55a80842a98f0e7ec3f325e0002de"
+}

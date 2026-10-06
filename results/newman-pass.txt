@@ -1,0 +1,280 @@
+newman
+
+F.CSA313 Lab05 - Registration API
+
+Folder T01 - Active student with completed prerequisite succeeds
+Sub-folder Setup student for T01
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T01_student [200 OK, 178B, 51ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder Setup course for T01
+  PUT http://localhost:3000/courses/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T01_course [200 OK, 178B, 6ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T01 - Active student with completed prerequisite succeeds
+  POST http://localhost:3000/registrations [201 Created, 202B, 4ms]
+  Pass  T01: HTTP status is 201
+  Pass  T01: result is OK
+  Pass  T01: registrationID is a positive integer
+  Pass  T01: response has no prerequisite-error details
+
+Folder T02 - Missing student returns ERROR_NO_STUDENT
+Sub-folder Setup course for T02
+  PUT http://localhost:3000/courses/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T02_course [200 OK, 178B, 4ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T02 - Missing student returns ERROR_NO_STUDENT
+  POST http://localhost:3000/registrations [200 OK, 192B, 4ms]
+  Pass  T02: HTTP status is 200
+  Pass  T02: result is ERROR_NO_STUDENT
+  Pass  T02: rejected registration has no registrationID
+  Pass  T02: response has no prerequisite-error details
+
+Folder T03 - Inactive student returns ERROR_INACTIVE_STUDENT
+Sub-folder Setup student for T03
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T03_student [200 OK, 178B, 4ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder Setup course for T03
+  PUT http://localhost:3000/courses/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T03_course [200 OK, 178B, 4ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T03 - Inactive student returns ERROR_INACTIVE_STUDENT
+  POST http://localhost:3000/registrations [200 OK, 198B, 3ms]
+  Pass  T03: HTTP status is 200
+  Pass  T03: result is ERROR_INACTIVE_STUDENT
+  Pass  T03: rejected registration has no registrationID
+  Pass  T03: response has no prerequisite-error details
+
+Folder T04 - Missing course returns ERROR_NO_COURSE
+Sub-folder Setup student for T04
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T04_student [200 OK, 178B, 4ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T04 - Missing course returns ERROR_NO_COURSE
+  POST http://localhost:3000/registrations [200 OK, 191B, 4ms]
+  Pass  T04: HTTP status is 200
+  Pass  T04: result is ERROR_NO_COURSE
+  Pass  T04: rejected registration has no registrationID
+  Pass  T04: response has no prerequisite-error details
+
+Folder T05 - Unrelated completed course does not satisfy prerequisite
+Sub-folder Setup student for T05
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T05_student [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder Setup course for T05
+  PUT http://localhost:3000/courses/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T05_course [200 OK, 178B, 4ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T05 - Unrelated completed course does not satisfy prerequisite
+  POST http://localhost:3000/registrations [200 OK, 215B, 3ms]
+  Pass  T05: HTTP status is 200
+  Pass  T05: result is ERROR_PREREQUISITES
+  Pass  T05: rejected registration has no registrationID
+  Pass  T05: missing prerequisites are exact
+
+Folder T06 - Missing student takes precedence over missing course
+Sub-folder T06 - Missing student takes precedence over missing course
+  POST http://localhost:3000/registrations [200 OK, 192B, 3ms]
+  Pass  T06: HTTP status is 200
+  Pass  T06: result is ERROR_NO_STUDENT
+  Pass  T06: rejected registration has no registrationID
+  Pass  T06: response has no prerequisite-error details
+
+Folder T07 - Inactive student takes precedence over missing course
+Sub-folder Setup student for T07
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T07_student [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T07 - Inactive student takes precedence over missing course
+  POST http://localhost:3000/registrations [200 OK, 198B, 3ms]
+  Pass  T07: HTTP status is 200
+  Pass  T07: result is ERROR_INACTIVE_STUDENT
+  Pass  T07: rejected registration has no registrationID
+  Pass  T07: response has no prerequisite-error details
+
+Folder T08 - Inactive student takes precedence over missing prerequisites
+Sub-folder Setup student for T08
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T08_student [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder Setup course for T08
+  PUT http://localhost:3000/courses/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T08_course [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T08 - Inactive student takes precedence over missing prerequisites
+  POST http://localhost:3000/registrations [200 OK, 198B, 3ms]
+  Pass  T08: HTTP status is 200
+  Pass  T08: result is ERROR_INACTIVE_STUDENT
+  Pass  T08: rejected registration has no registrationID
+  Pass  T08: response has no prerequisite-error details
+
+Folder T09 - Partially completed prerequisites report exactly the missing course
+Sub-folder Setup student for T09
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T09_student [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder Setup course for T09
+  PUT http://localhost:3000/courses/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T09_course [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T09 - Partially completed prerequisites report exactly the missing course
+  POST http://localhost:3000/registrations [200 OK, 215B, 2ms]
+  Pass  T09: HTTP status is 200
+  Pass  T09: result is ERROR_PREREQUISITES
+  Pass  T09: rejected registration has no registrationID
+  Pass  T09: missing prerequisites are exact
+
+Folder T10 - No prerequisites succeeds with no completed courses
+Sub-folder Setup student for T10
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T10_student [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder Setup course for T10
+  PUT http://localhost:3000/courses/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T10_course [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T10 - No prerequisites succeeds with no completed courses
+  POST http://localhost:3000/registrations [201 Created, 202B, 4ms]
+  Pass  T10: HTTP status is 201
+  Pass  T10: result is OK
+  Pass  T10: registrationID is a positive integer
+  Pass  T10: response has no prerequisite-error details
+
+Folder T11 - Empty completed-course list reports every prerequisite
+Sub-folder Setup student for T11
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T11_student [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder Setup course for T11
+  PUT http://localhost:3000/courses/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T11_course [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T11 - Empty completed-course list reports every prerequisite
+  POST http://localhost:3000/registrations [200 OK, 223B, 3ms]
+  Pass  T11: HTTP status is 200
+  Pass  T11: result is ERROR_PREREQUISITES
+  Pass  T11: rejected registration has no registrationID
+  Pass  T11: missing prerequisites are exact
+
+Folder T12 - Missing studentID returns ERROR_BAD_REQUEST
+Sub-folder Setup course for T12
+  PUT http://localhost:3000/courses/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T12_course [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T12 - Missing studentID returns ERROR_BAD_REQUEST
+  POST http://localhost:3000/registrations [400 Bad Request, 202B, 3ms]
+  Pass  T12: HTTP status is 400
+  Pass  T12: result is ERROR_BAD_REQUEST
+  Pass  T12: rejected registration has no registrationID
+  Pass  T12: response has no prerequisite-error details
+
+Folder T13 - Missing courseID returns ERROR_BAD_REQUEST
+Sub-folder Setup student for T13
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T13_student [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T13 - Missing courseID returns ERROR_BAD_REQUEST
+  POST http://localhost:3000/registrations [400 Bad Request, 202B, 3ms]
+  Pass  T13: HTTP status is 400
+  Pass  T13: result is ERROR_BAD_REQUEST
+  Pass  T13: rejected registration has no registrationID
+  Pass  T13: response has no prerequisite-error details
+
+Folder T14 - Malformed JSON returns ERROR_BAD_JSON
+Sub-folder Setup student for T14
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T14_student [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder Setup course for T14
+  PUT http://localhost:3000/courses/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T14_course [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T14 - Malformed JSON returns ERROR_BAD_JSON
+  POST http://localhost:3000/registrations [400 Bad Request, 199B, 3ms]
+  Pass  T14: HTTP status is 400
+  Pass  T14: result is ERROR_BAD_JSON
+  Pass  T14: rejected registration has no registrationID
+  Pass  T14: response has no prerequisite-error details
+
+Folder T15 - All prerequisites completed in another order with extra courses succeeds
+Sub-folder Setup student for T15
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T15_student [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder Setup course for T15
+  PUT http://localhost:3000/courses/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T15_course [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T15 - All prerequisites completed in another order with extra courses succeeds
+  POST http://localhost:3000/registrations [201 Created, 202B, 2ms]
+  Pass  T15: HTTP status is 201
+  Pass  T15: result is OK
+  Pass  T15: registrationID is a positive integer
+  Pass  T15: response has no prerequisite-error details
+
+Folder T16 - Omitted setup fields use active and empty-array defaults
+Sub-folder Setup student for T16
+  PUT http://localhost:3000/students/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T16_student [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder Setup course for T16
+  PUT http://localhost:3000/courses/lab05_1791246272211_da389e322dc44cf49c3a416002d9cbe3_T16_course [200 OK, 178B, 3ms]
+  Pass  Setup HTTP status is 200
+  Pass  Setup result is OK
+
+Sub-folder T16 - Omitted setup fields use active and empty-array defaults
+  POST http://localhost:3000/registrations [201 Created, 202B, 3ms]
+  Pass  T16: HTTP status is 201
+  Pass  T16: result is OK
+  Pass  T16: registrationID is a positive integer
+  Pass  T16: response has no prerequisite-error details
+
+---------------------------------------------------------------
+|                         |        executed |          failed |
+--------------------------+-----------------+------------------
+|              iterations |               1 |               0 |
+--------------------------+-----------------+------------------
+|                requests |              41 |               0 |
+--------------------------+-----------------+------------------
+|            test-scripts |              41 |               0 |
+--------------------------+-----------------+------------------
+|      prerequest-scripts |              41 |               0 |
+--------------------------+-----------------+------------------
+|              assertions |             114 |               0 |
+---------------------------------------------------------------
+| total run duration: 3.6s                                    |
+---------------------------------------------------------------
+| total data received: 953B (approx)                          |
+---------------------------------------------------------------
+| average response time: 4ms [min: 2ms, max: 51ms, s.d.: 7ms] |
+---------------------------------------------------------------
+(node:7652) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+exit=0

@@ -1,0 +1,6 @@
+# Preserve supplied source, exported collections, and captured evidence bytes.
+server.js -text
+lab05-*.json -text
+results/** -text
+# Newman aligns failure tables with trailing spaces; retain the full output.
+results/*.txt whitespace=-blank-at-eol
